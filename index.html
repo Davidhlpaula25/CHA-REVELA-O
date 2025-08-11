@@ -71,6 +71,14 @@
             font-weight: bold;
             color: #d147a3;
         }
+        .admin-link {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 0.8em;
+            text-decoration: none;
+            display: block; /* O botão de admin agora está visível */
+        }
     </style>
 </head>
 <body>
@@ -78,7 +86,7 @@
         <!-- A imagem do convite foi inserida aqui -->
         <img src="foto.png" alt="Convite Chá Revelação" class="convite-imagem">
 
-        <h3> Confirme sua presença e escolha o presente</h3>
+        <h3>Confirme sua presença e escolha o presente</h3>
         <form id="presenceForm">
             <label for="nome">Nome Completo:</label>
             <input type="text" id="nome" required>
@@ -92,8 +100,7 @@
                 <option value="Não">Não</option>
             </select>
             
-            <!-- Novo campo para seleção do tamanho da fralda -->
-            <label for="fralda">Opções de Fralda:</label>
+            <label for="fralda">Tamanho da fralda que vai levar:</label>
             <select id="fralda" required>
                 <option value="M">M</option>
                 <option value="G">G</option>
@@ -103,6 +110,9 @@
         </form>
         <div id="message"></div>
     </div>
+    
+    <!-- Link para a página de administração (agora visível) -->
+    <a href="admin.html" class="admin-link">Painel de Administração</a>
 
     <!-- SDKs do Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
@@ -134,13 +144,13 @@
                 const nome = document.getElementById('nome').value;
                 const pessoas = document.getElementById('pessoas').value;
                 const confirmacao = document.getElementById('confirmacao').value;
-                const fralda = document.getElementById('fralda').value; // Coleta o valor do novo campo
+                const fralda = document.getElementById('fralda').value;
 
                 database.ref('convidados').push({
                     nome: nome,
                     pessoas: pessoas,
                     confirmacao: confirmacao,
-                    fralda: fralda, // Adiciona o campo "fralda" ao objeto
+                    fralda: fralda,
                     timestamp: new Date().toISOString()
                 }).then(() => {
                     messageDiv.innerText = "Confirmação enviada! Obrigado.";

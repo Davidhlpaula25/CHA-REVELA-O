@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel de Administração - Chá Revelação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            color: #333;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #d147a3;
+            text-align: center;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background-color: #eee;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            margin: 5px;
+            min-width: 150px;
+        }
+        .stat-card h3 {
+            margin-top: 0;
+            color: #666;
+        }
+        .stat-card p {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 0;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border-left: 5px solid #d147a3;
+            text-align: left;
+        }
+        .password-container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        #passwordInput {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 200px;
+        }
+        #passwordButton {
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            background-color: #d147a3;
+            color: white;
+            cursor: pointer;
+        }
+        .back-button {
+            display: block;
+            margin-top: 20px;
+            background-color: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            width: 200px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .back-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Painel de Administração</h1>
+        <div id="passwordSection" class="password-container">
+            <label for="passwordInput">Senha de Acesso:</label>
+            <input type="password" id="passwordInput">
+            <button id="passwordButton">Entrar</button>
+        </div>
+        <div id="adminPanel" style="display: none;">
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total de Convidados</h3>
+                    <p id="totalCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Confirmados</h3>
+                    <p id="confirmedCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Fraldas M</h3>
+                    <p id="fraldaMCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Fraldas G</h3>
+                    <p id="fraldaGCount">0</p>
+                </div>
+            </div>
+
+            <h2>Lista de Convidados</h2>
+            <ul id="guestList">
+                <li>Nenhuma confirmação ainda.</li>
+            </ul>
+        </div>
+        <a href="index.html" class="back-button">Voltar para o Convite</a>
+    </div>
+
+    <!-- SDKs do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyCjV8eAK679i4rPABYh6FgYxwsMaXfJ-4E",
+          authDomain: "cha-revelacao-c436f.firebaseapp.com",
+          projectId: "cha-revelacao-c436f",
+          storageBucket: "cha-revelacao-c436f.firebasestorage.app",
+          messagingSenderId: "279890578009",
+          appId: "1:279890578009:web:7d24db4e75493b8ba43f48"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const passwordInput = document.getElementById('passwordInput');
+        const passwordButton = document.getElementById('passwordButton');
+        const passwordSection = document.getElementById('passwordSection');
+        const adminPanel = document.getElementById('adminPanel');
+
+        const totalCount = document.getElementById('totalCount');
+        const confirmedCount = document.getElementById('confirmedCount');
+        const fraldaMCount = document.getElementById('fraldaMCount');
+        const fraldaGCount = document.getElementById('fraldaGCount');
+        const guestList = document.getElementById('guestList');
+
+        // Senha para acesso. Mude para algo difícil de adivinhar!
+        const ADMIN_PASSWORD = "Sirla8523";
+
+        passwordButton.addEventListener('click', () => {
+            if (passwordInput.value === ADMIN_PASSWORD) {
+                passwordSection.style.display = 'none';
+                adminPanel.style.display = 'block';
+                loadGuests();
+            } else {
+                alert('Senha incorreta!');
+            }
+        });
+
+        function loadGuests() {
+            // Ouve por mudanças na lista de convidados
+            database.ref('convidados').on('value', (snapshot) => {
+                const guests = snapshot.val();
+                let confirmed = 0;
+                let fraldaM = 0;
+                let fraldaG = 0;
+                let total = 0;
+                guestList.innerHTML = '';
+
+                if (guests) {
+                    total = Object.keys(guests).length;
+                    Object.values(guests).forEach(guest => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `<strong>Nome:</strong> ${guest.nome} | <strong>Pessoas:</strong> ${guest.pessoas} | <strong>Confirmação:</strong> ${guest.confirmacao} | <strong>Fralda:</strong> ${guest.fralda || 'Não informou'}`;
+                        guestList.appendChild(li);
+
+                        if (guest.confirmacao === 'Sim') {
+                            confirmed += parseInt(guest.pessoas, 10);
+                            if (guest.fralda === 'M') {
+                                fraldaM++;
+                            } else if (guest.fralda === 'G') {
+                                fraldaG++;
+                            }
+                        }
+                    });
+                } else {
+                    guestList.innerHTML = '<li>Nenhuma confirmação ainda.</li>';
+                }
+
+                totalCount.innerText = total;
+                confirmedCount.innerText = confirmed;
+                fraldaMCount.innerText = fraldaM;
+                fraldaGCount.innerText = fraldaG;
+            });
+        }
+    </script>
+</body>
+</html>
