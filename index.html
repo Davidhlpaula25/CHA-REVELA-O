@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chá Revelação: Kerolly ou Théo?</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: #f0f0f0;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #d147a3;
+        }
+        p {
+            line-height: 1.6;
+        }
+        .convite-imagem {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin: 20px 0;
+        }
+        form {
+            margin-top: 30px;
+            text-align: left;
+        }
+        label, input, select {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        input[type="text"], input[type="number"], select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            background-color: #d147a3;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        button:hover:not(:disabled) {
+            background-color: #a83a82;
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #message {
+            margin-top: 20px;
+            font-weight: bold;
+            color: #d147a3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- A imagem do convite foi inserida aqui -->
+        <img src="foto.png" alt="Convite Chá Revelação" class="convite-imagem">
+
+        <h3> Confirme sua presença e escolha o presente</h3>
+        <form id="presenceForm">
+            <label for="nome">Nome Completo:</label>
+            <input type="text" id="nome" required>
+
+            <label for="pessoas">Número de adultos (incluindo você):</label>
+            <input type="number" id="pessoas" min="1" value="1" required>
+
+            <label for="confirmacao">Vai comparecer?</label>
+            <select id="confirmacao" required>
+                <option value="Sim">Sim</option>
+                <option value="Não">Não</option>
+            </select>
+            
+            <!-- Novo campo para seleção do tamanho da fralda -->
+            <label for="fralda">Opções de Fralda:</label>
+            <select id="fralda" required>
+                <option value="M">M</option>
+                <option value="G">G</option>
+            </select>
+            
+            <button type="submit" id="submitButton">Enviar( )</button>
+        </form>
+        <div id="message"></div>
+    </div>
+
+    <!-- SDKs do Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script>
+        // Seu código de configuração do Firebase
+        const firebaseConfig = {
+          apiKey: "AIzaSyCjV8eAK679i4rPABYh6FgYxwsMaXfJ-4E",
+          authDomain: "cha-revelacao-c436f.firebaseapp.com",
+          projectId: "cha-revelacao-c436f",
+          storageBucket: "cha-revelacao-c436f.firebasestorage.app",
+          messagingSenderId: "279890578009",
+          appId: "1:279890578009:web:7d24db4e75493b8ba43f48"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const form = document.getElementById('presenceForm');
+        const submitButton = document.getElementById('submitButton');
+        const messageDiv = document.getElementById('message');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            submitButton.disabled = true;
+            messageDiv.innerText = "Enviando...";
+            
+            try {
+                const nome = document.getElementById('nome').value;
+                const pessoas = document.getElementById('pessoas').value;
+                const confirmacao = document.getElementById('confirmacao').value;
+                const fralda = document.getElementById('fralda').value; // Coleta o valor do novo campo
+
+                database.ref('convidados').push({
+                    nome: nome,
+                    pessoas: pessoas,
+                    confirmacao: confirmacao,
+                    fralda: fralda, // Adiciona o campo "fralda" ao objeto
+                    timestamp: new Date().toISOString()
+                }).then(() => {
+                    messageDiv.innerText = "Confirmação enviada! Obrigado.";
+                    form.reset();
+                    submitButton.disabled = false;
+                }).catch(error => {
+                    messageDiv.innerText = "Erro ao enviar. Verifique o console para mais detalhes.";
+                    console.error("Erro ao escrever no banco de dados:", error);
+                    submitButton.disabled = false;
+                });
+            } catch (error) {
+                messageDiv.innerText = "Erro inesperado. Verifique o console.";
+                console.error("Erro inesperado:", error);
+                submitButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
