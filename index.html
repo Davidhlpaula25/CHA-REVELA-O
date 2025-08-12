@@ -6,6 +6,8 @@
     <title>Chá Revelação: Kerolly ou Théo?</title>
     <!-- Adicionando Font Awesome para o ícone de localização -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Adicionando three.js para a animação 3D -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         body {
             font-family: 'Courier New', Courier, monospace;
@@ -106,7 +108,7 @@
         .location-icon {
             margin-right: 8px;
         }
-        /* Estilos e animações para os enfeites */
+        /* Estilos e animações para os enfeites CSS */
         .decorations {
             position: absolute;
             top: 0;
@@ -186,9 +188,25 @@
             0%, 100% { opacity: 0.7; }
             50% { opacity: 1; }
         }
+        /* Estilos para o canvas 3D */
+        #three-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        #three-canvas {
+            display: block;
+        }
     </style>
 </head>
 <body>
+    <div id="three-container">
+        <canvas id="three-canvas"></canvas>
+    </div>
+    
     <div class="decorations">
         <!-- Balões e nuvens -->
         <div class="decoration-item balloon" style="top: 15%; left: 10%; animation-name: float;"></div>
@@ -230,7 +248,6 @@
                 <option value="G">G</option>
             </select>
             
-            
             <button type="submit" id="submitButton">Enviar( )</button>
         </form>
         <div id="message"></div>
@@ -269,7 +286,6 @@
                 const pessoas = document.getElementById('pessoas').value;
                 const confirmacao = document.getElementById('confirmacao').value;
                 const fralda = document.getElementById('fralda').value;
-               
 
                 database.ref('convidados').push({
                     nome: nome,
@@ -292,6 +308,89 @@
                 console.error("Erro inesperado:", error);
                 submitButton.disabled = false;
             }
+        });
+        
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.getElementById('three-container');
+            const canvas = document.getElementById('three-canvas');
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
+            
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+
+            // Luzes
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(0, 10, 5);
+            scene.add(directionalLight);
+
+            // Geometria para o chocalho
+            const rattleHeadGeometry = new THREE.SphereGeometry(1, 32, 32);
+            const rattleHandleGeometry = new THREE.CylinderGeometry(0.2, 0.2, 3, 32);
+
+            // Geometria para a mamadeira
+            const bottleBodyGeometry = new THREE.CylinderGeometry(0.8, 1, 3, 32);
+            const bottleNippleGeometry = new THREE.SphereGeometry(0.5, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2);
+            
+            // Materiais
+            const pinkMaterial = new THREE.MeshStandardMaterial({ color: 0xffc0cb, roughness: 0.5, metalness: 0.2 });
+            const blueMaterial = new THREE.MeshStandardMaterial({ color: 0xadd8e6, roughness: 0.5, metalness: 0.2 });
+            const whiteMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5, metalness: 0.2 });
+
+            // Cria o chocalho
+            const rattleHead = new THREE.Mesh(rattleHeadGeometry, pinkMaterial);
+            const rattleHandle = new THREE.Mesh(rattleHandleGeometry, blueMaterial);
+            rattleHandle.position.y = -1.5;
+            rattleHandle.rotation.x = Math.PI / 2;
+            const rattle = new THREE.Group();
+            rattle.add(rattleHead);
+            rattle.add(rattleHandle);
+            rattle.position.set(-2, 0, 0); // Posição do chocalho
+            scene.add(rattle);
+
+            // Cria a mamadeira
+            const bottleBody = new THREE.Mesh(bottleBodyGeometry, whiteMaterial);
+            const bottleNipple = new THREE.Mesh(bottleNippleGeometry, pinkMaterial);
+            bottleNipple.position.y = 1.5;
+            const bottle = new THREE.Group();
+            bottle.add(bottleBody);
+            bottle.add(bottleNipple);
+            bottle.position.set(2, 0, 0); // Posição da mamadeira
+            scene.add(bottle);
+
+            camera.position.z = 5;
+
+            // Animação de rotação e flutuação
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Animação do chocalho
+                rattle.rotation.x += 0.005;
+                rattle.rotation.y += 0.005;
+                rattle.position.y = Math.sin(Date.now() * 0.001) * 0.5;
+
+                // Animação da mamadeira
+                bottle.rotation.x += 0.008;
+                bottle.rotation.z += 0.003;
+                bottle.position.y = Math.cos(Date.now() * 0.001) * 0.5;
+
+                renderer.render(scene, camera);
+            }
+            
+            // Lidar com redimensionamento da janela
+            window.addEventListener('resize', () => {
+                const newWidth = container.clientWidth;
+                const newHeight = container.clientHeight;
+                camera.aspect = newWidth / newHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(newWidth, newHeight);
+            });
+
+            animate();
         });
     </script>
 </body>
