@@ -13,6 +13,8 @@
             color: #333;
             text-align: center;
             padding: 20px;
+            overflow-x: hidden;
+            position: relative;
         }
         .container {
             max-width: 600px;
@@ -21,6 +23,8 @@
             padding: 30px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
         }
         h1 {
             color: #d147a3;
@@ -39,13 +43,13 @@
             margin-top: 30px;
             text-align: left;
         }
-        label, input, select {
+        label, input, select, textarea {
             display: block;
             width: 100%;
             box-sizing: border-box;
             margin-bottom: 10px;
         }
-        input[type="text"], input[type="number"], select {
+        input[type="text"], input[type="number"], select, textarea {
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -80,6 +84,8 @@
             font-size: 0.8em;
             text-decoration: none;
             display: block;
+            position: relative;
+            z-index: 10;
         }
         .location-button {
             background-color: #d147a3;
@@ -91,6 +97,8 @@
             margin-top: 20px;
             transition: background-color 0.3s;
             font-weight: bold;
+            position: relative;
+            z-index: 10;
         }
         .location-button:hover {
             background-color: #a83a82;
@@ -98,14 +106,111 @@
         .location-icon {
             margin-right: 8px;
         }
+        /* Estilos e animações para os enfeites */
+        .decorations {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+            overflow: hidden;
+        }
+        .decoration-item {
+            position: absolute;
+            animation-duration: 10s;
+            animation-iteration-count: infinite;
+            animation-timing-function: ease-in-out;
+            opacity: 0.7;
+        }
+        .balloon {
+            width: 50px;
+            height: 60px;
+            background-color: #ffc0cb;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+        }
+        .balloon::before {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 1px;
+            height: 20px;
+            background-color: #d147a3;
+        }
+        .balloon-blue {
+            background-color: #add8e6;
+        }
+        .balloon-blue::before {
+             background-color: #2e8b57;
+        }
+        .cloud {
+            width: 100px;
+            height: 30px;
+            background: white;
+            border-radius: 100px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .cloud::before, .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+        }
+        .cloud::before {
+            width: 60px;
+            height: 60px;
+            top: -25px;
+            left: 10px;
+        }
+        .cloud::after {
+            width: 40px;
+            height: 40px;
+            top: -15px;
+            right: 10px;
+        }
+        .star {
+            font-size: 1.5em;
+            color: gold;
+            animation-name: flicker;
+            animation-duration: 2s;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0); }
+        }
+        @keyframes flicker {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
     </style>
 </head>
 <body>
+    <div class="decorations">
+        <!-- Balões e nuvens -->
+        <div class="decoration-item balloon" style="top: 15%; left: 10%; animation-name: float;"></div>
+        <div class="decoration-item balloon balloon-blue" style="top: 30%; left: 80%; animation-name: float; animation-duration: 12s; animation-delay: 2s;"></div>
+        <div class="decoration-item balloon" style="top: 50%; left: 25%; animation-name: float; animation-duration: 11s; animation-delay: 1s;"></div>
+        <div class="decoration-item balloon balloon-blue" style="top: 75%; left: 60%; animation-name: float; animation-duration: 13s; animation-delay: 4s;"></div>
+        <div class="decoration-item cloud" style="top: 20%; left: 5%; animation-name: float; animation-duration: 15s; animation-delay: 5s;"></div>
+        <div class="decoration-item cloud" style="top: 60%; left: 80%; animation-name: float; animation-duration: 18s;"></div>
+        <div class="decoration-item cloud" style="top: 45%; left: 40%; animation-name: float; animation-duration: 16s; animation-delay: 3s;"></div>
+        <!-- Estrelas -->
+        <div class="decoration-item star" style="top: 10%; left: 50%;">⭐</div>
+        <div class="decoration-item star" style="top: 80%; left: 15%; animation-delay: 1s;">⭐</div>
+        <div class="decoration-item star" style="top: 40%; left: 90%; animation-delay: 2s;">⭐</div>
+        <div class="decoration-item star" style="top: 70%; left: 30%; animation-delay: 3s;">⭐</div>
+    </div>
+    
     <div class="container">
         <!-- A imagem do convite foi inserida aqui -->
         <img src="foto.png" alt="Convite Chá Revelação" class="convite-imagem">
 
-        <h3>Confirme sua presença e escolha o presente</h3>
+        <h3>Confirme sua presença</h3> <br>
+        <h4>Contamos com seu Mimo para tornar esse dia ainda mais especial!(opcional).</h4>
         <form id="presenceForm">
             <label for="nome">Nome Completo:</label>
             <input type="text" id="nome" required>
@@ -125,15 +230,11 @@
                 <option value="G">G</option>
             </select>
             
+            
             <button type="submit" id="submitButton">Enviar( )</button>
         </form>
         <div id="message"></div>
     </div>
-    
-    <!-- Link para o endereço com ícone clicável, agora como um botão -->
-    <a href="https://www.google.com/maps/search/?api=1&query=Rua+da+Divisa,+Qd+7+-+Lt+67+-+St.+Morada+do+Sol,+Goiânia+-+GO,+74480-430" target="_blank" class="location-button">
-        <i class="fas fa-map-marker-alt location-icon"></i> Ver no Mapa
-    </a>
     
     <!-- Link para a página de administração -->
     <a href="admin.html" class="admin-link">Painel de Administração</a>
@@ -168,12 +269,14 @@
                 const pessoas = document.getElementById('pessoas').value;
                 const confirmacao = document.getElementById('confirmacao').value;
                 const fralda = document.getElementById('fralda').value;
+               
 
                 database.ref('convidados').push({
                     nome: nome,
                     pessoas: pessoas,
                     confirmacao: confirmacao,
                     fralda: fralda,
+                    mimo: mimo || 'Não informado',
                     timestamp: new Date().toISOString()
                 }).then(() => {
                     messageDiv.innerText = "Confirmação enviada! Obrigado.";
