@@ -129,7 +129,6 @@
                 </select>
             </div>
             
-            
             <button type="submit" id="submitButton" class="w-full bg-pink-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 button-primary">
                 Enviar( )
             </button>
@@ -168,13 +167,15 @@
                 const pessoas = document.getElementById('pessoas').value;
                 const confirmacao = document.getElementById('confirmacao').value;
                 const fralda = document.getElementById('fralda').value;
+                const mimoElement = document.getElementById('mimo');
+                const mimo = mimoElement ? mimoElement.value : 'Não informado';
 
                 database.ref('convidados').push({
                     nome: nome,
                     pessoas: pessoas,
                     confirmacao: confirmacao,
                     fralda: fralda,
-                    mimo: mimo || 'Não informado',
+                    mimo: mimo,
                     timestamp: new Date().toISOString()
                 }).then(() => {
                     messageDiv.innerText = "Confirmação enviada! Obrigado.";
