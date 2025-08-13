@@ -4,112 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chá Revelação: Kerolly ou Théo?</title>
-    <!-- Adicionando Font Awesome para o ícone de localização -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <!-- Adicionando three.js para a animação 3D -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+        
         body {
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #f0f0f0;
-            color: #333;
-            text-align: center;
-            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f4f8;
+            color: #4b5563;
             overflow-x: hidden;
-            position: relative;
         }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            position: relative;
-            z-index: 10;
-        }
-        h1 {
-            color: #d147a3;
-        }
-        p {
-            line-height: 1.6;
-        }
-        .convite-imagem {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            margin: 20px 0;
-        }
-        form {
-            margin-top: 30px;
-            text-align: left;
-        }
-        label, input, select, textarea {
-            display: block;
-            width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 10px;
-        }
-        input[type="text"], input[type="number"], select, textarea {
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-        }
-        button {
-            background-color: #d147a3;
-            color: #fff;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            margin-top: 10px;
-            transition: background-color 0.3s;
-        }
-        button:hover:not(:disabled) {
-            background-color: #a83a82;
-        }
-        button:disabled {
-            background-color: #cccccc;
-            cursor: not-allowed;
-        }
-        #message {
-            margin-top: 20px;
-            font-weight: bold;
-            color: #d147a3;
-        }
-        .admin-link {
-            text-align: center;
-            margin-top: 20px;
-            color: #999;
-            font-size: 0.8em;
-            text-decoration: none;
-            display: block;
-            position: relative;
-            z-index: 10;
-        }
-        .location-button {
-            background-color: #d147a3;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            display: inline-block;
-            margin-top: 20px;
-            transition: background-color 0.3s;
-            font-weight: bold;
-            position: relative;
-            z-index: 10;
-        }
-        .location-button:hover {
-            background-color: #a83a82;
-        }
-        .location-icon {
-            margin-right: 8px;
-        }
-        /* Estilos e animações para os enfeites CSS */
-        .decorations {
+
+        .floating-particles {
             position: absolute;
             top: 0;
             left: 0;
@@ -119,144 +26,119 @@
             z-index: 5;
             overflow: hidden;
         }
-        .decoration-item {
+
+        .particle {
             position: absolute;
-            animation-duration: 10s;
-            animation-iteration-count: infinite;
-            animation-timing-function: ease-in-out;
-            opacity: 0.7;
-        }
-        .balloon {
-            width: 50px;
-            height: 60px;
-            background-color: #ffc0cb;
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
-        }
-        .balloon::before {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 1px;
-            height: 20px;
-            background-color: #d147a3;
-        }
-        .balloon-blue {
-            background-color: #add8e6;
-        }
-        .balloon-blue::before {
-             background-color: #2e8b57;
-        }
-        .cloud {
-            width: 100px;
-            height: 30px;
-            background: white;
-            border-radius: 100px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .cloud::before, .cloud::after {
-            content: '';
-            position: absolute;
-            background: white;
+            background: rgba(255, 105, 180, 0.5);
             border-radius: 50%;
+            animation: float 10s infinite ease-in-out;
+            opacity: 0;
         }
-        .cloud::before {
-            width: 60px;
-            height: 60px;
-            top: -25px;
-            left: 10px;
+        
+        .particle-blue {
+            background: rgba(173, 216, 230, 0.5);
         }
-        .cloud::after {
-            width: 40px;
-            height: 40px;
-            top: -15px;
-            right: 10px;
+
+        .heart {
+            font-size: 2rem;
+            color: #ffc0cb;
+            position: absolute;
+            animation: float 15s infinite ease-in-out;
+            opacity: 0;
+            text-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
         }
-        .star {
-            font-size: 1.5em;
-            color: gold;
-            animation-name: flicker;
-            animation-duration: 2s;
-        }
+
         @keyframes float {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-            100% { transform: translateY(0); }
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.8; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
         }
-        @keyframes flicker {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
+
+        .form-card {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(5px);
+            position: relative;
+            z-index: 10;
         }
-        /* Estilos para o canvas 3D */
-        #three-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
+
+        input[type="text"], input[type="number"], select, textarea {
+            transition: all 0.3s;
+            background-color: #f9fafb;
+            border-color: #d1d5db;
         }
-        #three-canvas {
-            display: block;
+
+        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #ffc0cb;
+            box-shadow: 0 0 0 2px #ffc0cb;
+        }
+
+        .button-primary {
+            transition: all 0.3s;
+        }
+
+        .button-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+
+        .admin-link {
+            color: #9ca3af;
+            font-size: 0.75rem;
+            text-decoration: underline;
+            transition: color 0.3s;
+        }
+        .admin-link:hover {
+            color: #4b5563;
         }
     </style>
 </head>
-<body>
-    <div id="three-container">
-        <canvas id="three-canvas"></canvas>
-    </div>
-    
-    <div class="decorations">
-        <!-- Balões e nuvens -->
-        <div class="decoration-item balloon" style="top: 15%; left: 10%; animation-name: float;"></div>
-        <div class="decoration-item balloon balloon-blue" style="top: 30%; left: 80%; animation-name: float; animation-duration: 12s; animation-delay: 2s;"></div>
-        <div class="decoration-item balloon" style="top: 50%; left: 25%; animation-name: float; animation-duration: 11s; animation-delay: 1s;"></div>
-        <div class="decoration-item balloon balloon-blue" style="top: 75%; left: 60%; animation-name: float; animation-duration: 13s; animation-delay: 4s;"></div>
-        <div class="decoration-item cloud" style="top: 20%; left: 5%; animation-name: float; animation-duration: 15s; animation-delay: 5s;"></div>
-        <div class="decoration-item cloud" style="top: 60%; left: 80%; animation-name: float; animation-duration: 18s;"></div>
-        <div class="decoration-item cloud" style="top: 45%; left: 40%; animation-name: float; animation-duration: 16s; animation-delay: 3s;"></div>
-        <!-- Estrelas -->
-        <div class="decoration-item star" style="top: 10%; left: 50%;">⭐</div>
-        <div class="decoration-item star" style="top: 80%; left: 15%; animation-delay: 1s;">⭐</div>
-        <div class="decoration-item star" style="top: 40%; left: 90%; animation-delay: 2s;">⭐</div>
-        <div class="decoration-item star" style="top: 70%; left: 30%; animation-delay: 3s;">⭐</div>
-    </div>
-    
-    <div class="container">
-        <!-- A imagem do convite foi inserida aqui -->
-        <img src="foto.png" alt="Convite Chá Revelação" class="convite-imagem">
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen relative p-4">
+    <div class="max-w-xl mx-auto w-full p-6 bg-white rounded-xl shadow-2xl z-10 form-card transition-all duration-500">
+        <div class="floating-particles"></div>
+        <img src="foto.png" alt="Convite Chá Revelação" class="w-full h-auto rounded-lg shadow-md mb-6 relative z-10">
 
-        <h3>Confirme sua presença</h3> <br>
-        <h4>Contamos com seu Mimo para tornar esse dia ainda mais especial!(opcional).</h4>
-        <form id="presenceForm">
-            <label for="nome">Nome Completo:</label>
-            <input type="text" id="nome" required>
+        <h3 class="text-2xl font-semibold mb-2 text-pink-500 relative z-10">Confirme sua presença</h3>
+        <p class="text-sm text-gray-600 mb-6 relative z-10">Contamos com seu Mimo para tornar esse dia ainda mais especial! (opcional)</p>
 
-            <label for="pessoas">Número de adultos (incluindo você):</label>
-            <input type="number" id="pessoas" min="1" value="1" required>
+        <form id="presenceForm" class="space-y-4 relative z-10">
+            <div>
+                <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo:</label>
+                <input type="text" id="nome" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all duration-200">
+            </div>
 
-            <label for="confirmacao">Vai comparecer?</label>
-            <select id="confirmacao" required>
-                <option value="Sim">Sim</option>
-                <option value="Não">Não</option>
-            </select>
+            <div>
+                <label for="pessoas" class="block text-sm font-medium text-gray-700 mb-1">Número de adultos (incluindo você):</label>
+                <input type="number" id="pessoas" min="1" value="1" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all duration-200">
+            </div>
+
+            <div>
+                <label for="confirmacao" class="block text-sm font-medium text-gray-700 mb-1">Vai comparecer?</label>
+                <select id="confirmacao" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all duration-200">
+                    <option value="Sim">Sim</option>
+                    <option value="Não">Não</option>
+                </select>
+            </div>
             
-            <label for="fralda">Tamanho da fralda que vai levar:</label>
-            <select id="fralda" required>
-                <option value="M">M</option>
-                <option value="G">G</option>
-            </select>
+            <div>
+                <label for="fralda" class="block text-sm font-medium text-gray-700 mb-1">Tamanho da fralda que vai levar:</label>
+                <select id="fralda" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all duration-200">
+                    <option value="M">M</option>
+                    <option value="G">G</option>
+                </select>
+            </div>
             
-            <button type="submit" id="submitButton">Enviar( )</button>
+            
+            <button type="submit" id="submitButton" class="w-full bg-pink-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 button-primary">
+                Enviar( )
+            </button>
         </form>
-        <div id="message"></div>
+        <div id="message" class="mt-4 text-center text-sm font-semibold relative z-10"></div>
     </div>
     
-    <!-- Link para a página de administração -->
-    <a href="admin.html" class="admin-link">Painel de Administração</a>
+    <a href="admin.html" class="mt-8 admin-link relative z-10">Painel de Administração</a>
 
-    <!-- SDKs do Firebase -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
     <script>
@@ -309,88 +191,32 @@
                 submitButton.disabled = false;
             }
         });
-        
-        document.addEventListener('DOMContentLoaded', function () {
-            const container = document.getElementById('three-container');
-            const canvas = document.getElementById('three-canvas');
 
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true });
-            
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
+        // Adiciona partículas e corações de fundo
+        document.addEventListener('DOMContentLoaded', () => {
+            const particlesContainer = document.querySelector('.floating-particles');
+            const particleCount = 25;
+            for (let i = 0; i < particleCount; i++) {
+                const isHeart = Math.random() > 0.5;
+                const element = document.createElement('div');
+                element.style.left = `${Math.random() * 100}%`;
+                element.style.animationDuration = `${Math.random() * 10 + 10}s`;
+                element.style.animationDelay = `${Math.random() * 5}s`;
+                element.style.top = `${Math.random() * 100}%`;
 
-            // Luzes
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-            scene.add(ambientLight);
-            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            directionalLight.position.set(0, 10, 5);
-            scene.add(directionalLight);
-
-            // Geometria para o chocalho
-            const rattleHeadGeometry = new THREE.SphereGeometry(1, 32, 32);
-            const rattleHandleGeometry = new THREE.CylinderGeometry(0.2, 0.2, 3, 32);
-
-            // Geometria para a mamadeira
-            const bottleBodyGeometry = new THREE.CylinderGeometry(0.8, 1, 3, 32);
-            const bottleNippleGeometry = new THREE.SphereGeometry(0.5, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2);
-            
-            // Materiais
-            const pinkMaterial = new THREE.MeshStandardMaterial({ color: 0xffc0cb, roughness: 0.5, metalness: 0.2 });
-            const blueMaterial = new THREE.MeshStandardMaterial({ color: 0xadd8e6, roughness: 0.5, metalness: 0.2 });
-            const whiteMaterial = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5, metalness: 0.2 });
-
-            // Cria o chocalho
-            const rattleHead = new THREE.Mesh(rattleHeadGeometry, pinkMaterial);
-            const rattleHandle = new THREE.Mesh(rattleHandleGeometry, blueMaterial);
-            rattleHandle.position.y = -1.5;
-            rattleHandle.rotation.x = Math.PI / 2;
-            const rattle = new THREE.Group();
-            rattle.add(rattleHead);
-            rattle.add(rattleHandle);
-            rattle.position.set(-2, 0, 0); // Posição do chocalho
-            scene.add(rattle);
-
-            // Cria a mamadeira
-            const bottleBody = new THREE.Mesh(bottleBodyGeometry, whiteMaterial);
-            const bottleNipple = new THREE.Mesh(bottleNippleGeometry, pinkMaterial);
-            bottleNipple.position.y = 1.5;
-            const bottle = new THREE.Group();
-            bottle.add(bottleBody);
-            bottle.add(bottleNipple);
-            bottle.position.set(2, 0, 0); // Posição da mamadeira
-            scene.add(bottle);
-
-            camera.position.z = 5;
-
-            // Animação de rotação e flutuação
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                // Animação do chocalho
-                rattle.rotation.x += 0.005;
-                rattle.rotation.y += 0.005;
-                rattle.position.y = Math.sin(Date.now() * 0.001) * 0.5;
-
-                // Animação da mamadeira
-                bottle.rotation.x += 0.008;
-                bottle.rotation.z += 0.003;
-                bottle.position.y = Math.cos(Date.now() * 0.001) * 0.5;
-
-                renderer.render(scene, camera);
+                if (isHeart) {
+                    element.className = 'heart';
+                    element.innerText = '💖';
+                } else {
+                    element.className = 'particle';
+                    element.style.width = `${Math.random() * 10 + 5}px`;
+                    element.style.height = element.style.width;
+                    if (Math.random() > 0.5) {
+                        element.classList.add('particle-blue');
+                    }
+                }
+                particlesContainer.appendChild(element);
             }
-            
-            // Lidar com redimensionamento da janela
-            window.addEventListener('resize', () => {
-                const newWidth = container.clientWidth;
-                const newHeight = container.clientHeight;
-                camera.aspect = newWidth / newHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(newWidth, newHeight);
-            });
-
-            animate();
         });
     </script>
 </body>
