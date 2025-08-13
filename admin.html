@@ -183,7 +183,10 @@
                     total = Object.keys(guests).length;
                     Object.values(guests).forEach(guest => {
                         const li = document.createElement('li');
-                        li.innerHTML = `<strong>Nome:</strong> ${guest.nome} | <strong>Pessoas:</strong> ${guest.pessoas} | <strong>Confirmação:</strong> ${guest.confirmacao} | <strong>Fralda:</strong> ${guest.fralda || 'Não informou'}`;
+                        li.innerHTML = `
+                            <strong>Nome:</strong> ${guest.nome} | <strong>Pessoas:</strong> ${guest.pessoas} | <strong>Confirmação:</strong> ${guest.confirmacao} <br>
+                            <strong>Fralda:</strong> ${guest.fralda || 'Não informou'} | <strong>Mensagem:</strong> ${guest.mensagem || 'Nenhuma mensagem deixada'}
+                        `;
                         guestList.appendChild(li);
 
                         if (guest.confirmacao === 'Sim') {
