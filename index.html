@@ -3,228 +3,166 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chá Revelação: Kerolly ou Théo?</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f0f4f8;
-            color: #4b5563;
-            overflow-x: hidden;
-        }
-
-        .floating-particles {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 5;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            background: rgba(255, 105, 180, 0.5);
-            border-radius: 50%;
-            animation: float 10s infinite ease-in-out;
-            opacity: 0;
-        }
-        
-        .particle-blue {
-            background: rgba(173, 216, 230, 0.5);
-        }
-
-        .heart {
-            font-size: 2rem;
-            color: #ffc0cb;
-            position: absolute;
-            animation: float 15s infinite ease-in-out;
-            opacity: 0;
-            text-shadow: 0 0 5px rgba(255, 105, 180, 0.5);
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.8; }
-            90% { opacity: 0.8; }
-            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
-        }
-
-        .form-card {
-            background-color: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(5px);
-            position: relative;
-            z-index: 10;
-        }
-
-        input[type="text"], input[type="number"], select, textarea {
-            transition: all 0.3s;
-            background-color: #f9fafb;
-            border-color: #d1d5db;
-        }
-
-        input[type="text"]:focus, input[type="number"]:focus, select:focus, textarea:focus {
-            outline: none;
-            border-color: #ffc0cb;
-            box-shadow: 0 0 0 2px #ffc0cb;
-        }
-
-        .button-primary {
-            transition: all 0.3s;
-        }
-
-        .button-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        .admin-link {
-            color: #9ca3af;
-            font-size: 0.75rem;
-            text-decoration: underline;
-            transition: color 0.3s;
-        }
-        .admin-link:hover {
-            color: #4b5563;
-        }
-    </style>
-</head>
-<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen relative p-4">
-    <div class="max-w-xl mx-auto w-full p-6 bg-white rounded-xl shadow-2xl z-10 form-card transition-all duration-500">
-        <div class="floating-particles"></div>
-        <img src="foto.png" alt="Convite Chá Revelação" class="w-full h-auto rounded-lg shadow-md mb-6 relative z-10">
-
-        <h3 class="text-2xl font-semibold mb-2 text-pink-500 relative z-10">Confirme sua presença</h3>
-        <p class="text-sm text-gray-600 mb-6 relative z-10">Contamos com seu Mimo para tornar esse dia ainda mais especial! (opcional)</p>
-
-        <form id="presenceForm" class="space-y-4 relative z-10">
-            <div>
-                <label for="nome" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo:</label>
-                <input type="text" id="nome" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all duration-200">
-            </div>
-
-            <div>
-                <label for="pessoas" class="block text-sm font-medium text-gray-700 mb-1">Número de adultos (incluindo você):</label>
-                <input type="number" id="pessoas" min="1" value="1" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all duration-200">
-            </div>
-
-            <div>
-                <label for="confirmacao" class="block text-sm font-medium text-gray-700 mb-1">Vai comparecer?</label>
-                <select id="confirmacao" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all duration-200">
-                    <option value="Sim">Sim</option>
-                    <option value="Não">Não</option>
-                </select>
-            </div>
-            
-            <div>
-                <label for="fralda" class="block text-sm font-medium text-gray-700 mb-1">Tamanho da fralda que vai levar:</label>
-                <select id="fralda" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all duration-200">
-                    <option value="M">M</option>
-                    <option value="G">G</option>
-                </select>
-            </div>
-            
-            <!-- Novo campo para o recado opcional -->
-            <div>
-                <label for="mensagem" class="block text-sm font-medium text-gray-700 mb-1" >Deixe uma mensagem para os futuros papais:</label>
-                <textarea id="mensagem" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-pink-300 focus:ring focus:ring-pink-200 focus:ring-opacity-50 transition-all duration-200" required></textarea>
-            </div>
-            
-            <button type="submit" id="submitButton" class="w-full bg-pink-500 text-white font-bold py-3 px-6 rounded-lg shadow-lg hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50 button-primary">
-                Enviar( )
-            </button>
-        </form>
-        <div id="message" class="mt-4 text-center text-sm font-semibold relative z-10"></div>
-    </div>
+    <meta name="description" content="Confirme sua presença no chá revelação! Descubra se será Kerolly ou Théo. Evento especial para celebrar a chegada do nosso bebê.">
+    <meta name="keywords" content="chá revelação, baby shower, kerolly, théo, confirmação presença">
+    <meta name="author" content="Família">
+    <meta name="robots" content="index, follow">
     
-    <a href="admin.html" class="mt-8 admin-link relative z-10">Painel de Administração</a>
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Chá Revelação: Kerolly ou Théo?">
+    <meta property="og:description" content="Confirme sua presença no nosso chá revelação! Será Kerolly ou Théo?">
+    <meta property="og:image" content="./assets/images/og-image.jpg">
+    <meta property="og:url" content="">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="Chá Revelação: Kerolly ou Théo?">
+    <meta property="twitter:description" content="Confirme sua presença no nosso chá revelação!">
+    <meta property="twitter:image" content="./assets/images/og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👶</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👶</text></svg>">
+    
+    <title>Chá Revelação: Kerolly ou Théo? | Confirme sua Presença</title>
+    
+    <!-- External Stylesheets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./assets/css/main.css">
+    
+    <!-- Performance optimizations -->
+    <link rel="dns-prefetch" href="//fonts.googleapis.com">
+    <link rel="dns-prefetch" href="//www.gstatic.com">
+</head>
+<body>
+    <!-- Background Animation Container -->
+    <div class="floating-particles" aria-hidden="true"></div>
+    
+    <!-- Skip to content link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only">Pular para o conteúdo principal</a>
+    
+    <!-- Main Content -->
+    <main id="main-content" class="main-content">
+        <div class="container">
+            <article class="card">
+                <div class="card-content">
+                    <!-- Hero Image -->
+                    <figure>
+                        <img src="./assets/images/foto.png" 
+                             alt="Convite do Chá Revelação - Descobrindo se será Kerolly ou Théo" 
+                             class="hero-image"
+                             loading="lazy"
+                             width="600"
+                             height="400">
+                    </figure>
+                    
+                    <!-- Header Section -->
+                    <header>
+                        <h1 class="heading-primary">
+                            Confirme sua Presença
+                        </h1>
+                        <p class="text-muted">
+                            Contamos com seu carinho para tornar esse dia ainda mais especial! 
+                            Sua presença é o presente mais importante. 💕
+                        </p>
+                    </header>
+                    
+                    <!-- Form Section -->
+                    <section>
+                        <form id="presenceForm" class="space-y-4" novalidate>
+                            <div class="form-group">
+                                <label for="nome" class="form-label">
+                                    Nome Completo <span class="text-pink-500">*</span>
+                                </label>
+                                <input 
+                                    type="text" 
+                                    id="nome" 
+                                    name="nome"
+                                    class="form-control" 
+                                    required 
+                                    autocomplete="name"
+                                    placeholder="Digite seu nome completo"
+                                    minlength="2"
+                                    maxlength="100">
+                            </div>
 
+                            <div class="form-group">
+                                <label for="pessoas" class="form-label">
+                                    Número de acompanhantes (incluindo você) <span class="text-pink-500">*</span>
+                                </label>
+                                <input 
+                                    type="number" 
+                                    id="pessoas" 
+                                    name="pessoas"
+                                    class="form-control" 
+                                    min="1" 
+                                    max="10"
+                                    value="1" 
+                                    required
+                                    autocomplete="off">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="confirmacao" class="form-label">
+                                    Vai comparecer? <span class="text-pink-500">*</span>
+                                </label>
+                                <select id="confirmacao" name="confirmacao" class="form-control form-select" required>
+                                    <option value="">Selecione uma opção</option>
+                                    <option value="Sim">Sim, estarei presente! 🎉</option>
+                                    <option value="Não">Infelizmente não poderei ir 😢</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="fralda" class="form-label">
+                                    Tamanho da fralda que pretende levar
+                                </label>
+                                <select id="fralda" name="fralda" class="form-control form-select">
+                                    <option value="M">Médio (M)</option>
+                                    <option value="G">Grande (G)</option>
+                                </select>
+                                <small class="text-muted">Muito apreciado! 🍼</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="mensagem" class="form-label">
+                                    Deixe uma mensagem carinhosa para os futuros papais
+                                </label>
+                                <textarea 
+                                    id="mensagem" 
+                                    name="mensagem"
+                                    rows="4" 
+                                    class="form-control form-textarea" 
+                                    placeholder="Escreva uma mensagem especial... 💝"
+                                    maxlength="500"></textarea>
+                                <small class="text-muted">Opcional - Máximo 500 caracteres</small>
+                            </div>
+                            
+                            <button type="submit" id="submitButton" class="btn btn-primary">
+                                Confirmar Presença ✨
+                            </button>
+                        </form>
+                        
+                        <!-- Message Area -->
+                        <div id="message" role="alert" aria-live="polite"></div>
+                    </section>
+                </div>
+            </article>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="text-center">
+        <a href="login.html" class="admin-link" aria-label="Acessar painel administrativo">
+            🔒 Painel de Administração
+        </a>
+    </footer>
+
+    <!-- Scripts -->
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
-    <script>
-        const firebaseConfig = {
-          apiKey: "AIzaSyCjV8eAK679i4rPABYh6FgYxwsMaXfJ-4E",
-          authDomain: "cha-revelacao-c436f.firebaseapp.com",
-          projectId: "cha-revelacao-c436f",
-          storageBucket: "cha-revelacao-c436f.firebasestorage.app",
-          messagingSenderId: "279890578009",
-          appId: "1:279890578009:web:7d24db4e75493b8ba43f48"
-        };
-        
-        firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const form = document.getElementById('presenceForm');
-        const submitButton = document.getElementById('submitButton');
-        const messageDiv = document.getElementById('message');
-
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            submitButton.disabled = true;
-            messageDiv.innerText = "Enviando...";
-            
-            try {
-                const nome = document.getElementById('nome').value;
-                const pessoas = document.getElementById('pessoas').value;
-                const confirmacao = document.getElementById('confirmacao').value;
-                const fralda = document.getElementById('fralda').value;
-                const mensagemElement = document.getElementById('mensagem');
-                const mensagem = mensagemElement ? mensagemElement.value : 'Nenhuma mensagem deixada';
-
-                database.ref('convidados').push({
-                    nome: nome,
-                    pessoas: pessoas,
-                    confirmacao: confirmacao,
-                    fralda: fralda,
-                    mensagem: mensagem,
-                    timestamp: new Date().toISOString()
-                }).then(() => {
-                    messageDiv.innerText = "Confirmação enviada! Obrigado.";
-                    form.reset();
-                    submitButton.disabled = false;
-                }).catch(error => {
-                    messageDiv.innerText = "Erro ao enviar. Verifique o console para mais detalhes.";
-                    console.error("Erro ao escrever no banco de dados:", error);
-                    submitButton.disabled = false;
-                });
-            } catch (error) {
-                messageDiv.innerText = "Erro inesperado. Verifique o console.";
-                console.error("Erro inesperado:", error);
-                submitButton.disabled = false;
-            }
-        });
-
-        // Adiciona partículas e corações de fundo
-        document.addEventListener('DOMContentLoaded', () => {
-            const particlesContainer = document.querySelector('.floating-particles');
-            const particleCount = 25;
-            for (let i = 0; i < particleCount; i++) {
-                const isHeart = Math.random() > 0.5;
-                const element = document.createElement('div');
-                element.style.left = `${Math.random() * 100}%`;
-                element.style.animationDuration = `${Math.random() * 10 + 10}s`;
-                element.style.animationDelay = `${Math.random() * 5}s`;
-                element.style.top = `${Math.random() * 100}%`;
-
-                if (isHeart) {
-                    element.className = 'heart';
-                    element.innerText = '💖';
-                } else {
-                    element.className = 'particle';
-                    element.style.width = `${Math.random() * 10 + 5}px`;
-                    element.style.height = element.style.width;
-                    if (Math.random() > 0.5) {
-                        element.classList.add('particle-blue');
-                    }
-                }
-                particlesContainer.appendChild(element);
-            }
-        });
-    </script>
+    <script src="./assets/js/main.js"></script>
 </body>
 </html>

@@ -3,105 +3,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Administração - Chá Revelação</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            color: #333;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        h1 {
-            color: #d147a3;
-            text-align: center;
-        }
-        .stats {
-            display: flex;
-            justify-content: space-around;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        .stat-card {
-            background-color: #eee;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
-            flex: 1;
-            margin: 5px;
-            min-width: 150px;
-        }
-        .stat-card h3 {
-            margin-top: 0;
-            color: #666;
-        }
-        .stat-card p {
-            font-size: 2em;
-            font-weight: bold;
-            margin: 0;
-        }
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        li {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 5px solid #d147a3;
-            text-align: left;
-        }
-        .password-container {
-            text-align: center;
-            margin-top: 50px;
-        }
-        #passwordInput {
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            width: 200px;
-        }
-        #passwordButton {
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            background-color: #d147a3;
-            color: white;
-            cursor: pointer;
-        }
-        .back-button {
-            display: block;
-            margin-top: 20px;
-            background-color: #6c757d;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            width: 200px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .back-button:hover {
-            background-color: #5a6268;
-        }
+    <meta name="description" content="Painel administrativo do chá revelação - gerencie confirmações de presença">
+    <meta name="robots" content="noindex, nofollow">
+    
+    <title>Painel Administrativo - Chá Revelação</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔒</text></svg>">
+    
+    <!-- Stylesheets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="./assets/css/admin.css">
+</head>
+<body>
+    <!-- Back Link -->
+    <div class="container">
+        <a href="#" onclick="logoutAndGoToIndex()" class="back-link">
+            ← Voltar ao formulário
+        </a>
+    </div>
+
+    <!-- Header -->
+    <div class="container">
+        <header class="header">
+            <h1>🎉 Painel Administrativo</h1>
+            <p class="subtitle">Gerenciamento do Chá Revelação - Kerolly ou Théo?</p>
+            <div style="margin-top: 1rem;">
+                <button onclick="logout()" class="btn btn-secondary" style="font-size: 0.875rem;">
+                    🔒 Sair do Painel
+                </button>
+            </div>
+        </header>
+    </div>
+
+    <!-- Navigation -->
+    <div class="container">
+        <nav class="nav">
+            <a href="#overview" class="nav-item active" onclick="showSection('overview')">
+                📊 Visão Geral
+            </a>
+            <a href="#guests" class="nav-item" onclick="showSection('guests')">
+                👥 Lista de Convidados
+            </a>
+            <a href="#messages" class="nav-item" onclick="showSection('messages')">
+                💌 Mensagens
+            </a>
+            <a href="#export" class="nav-item" onclick="showSection('export')">
+                📥 Exportar Dados
+            </a>
+        </nav>
+    </div>
+
+    <!-- Overview Section -->
+    <div class="container">
+        <section id="overview-section" class="section">
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="icon">👥</span>
+                    <h3>Total de Confirmações</h3>
+                    <div class="value" id="totalConfirmations">-</div>
+                    <div class="change positive" id="totalChange">Carregando...</div>
+                </div>
+                
+                <div class="stat-card success">
+                    <span class="icon">✅</span>
+                    <h3>Confirmados</h3>
+                    <div class="value" id="confirmedCount">-</div>
+                    <div class="change positive" id="confirmedChange">Carregando...</div>
+                </div>
+                
+                <div class="stat-card warning">
+                    <span class="icon">❌</span>
+                    <h3>Não Confirmados</h3>
+                    <div class="value" id="declinedCount">-</div>
+                    <div class="change" id="declinedChange">Carregando...</div>
+                </div>
+                
+                <div class="stat-card secondary">
+                    <span class="icon">🍼</span>
+                    <h3>Total de Fraldas</h3>
+                    <div class="value" id="diapersCount">-</div>
+                    <div class="change positive" id="diapersChange">Estimado</div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="content-card">
+                <div class="content-card-header">
+                    <h2 class="content-card-title">
+                        🕐 Atividade Recente
+                    </h2>
+                    <div class="content-card-actions">
+                        <button class="btn btn-secondary" onclick="refreshData()">
+                            🔄 Atualizar
+                        </button>
+                    </div>
+                </div>
+                <div class="content-card-body">
+                    <div id="recentActivity" class="loading">
+                        <div class="spinner"></div>
+                        Carregando atividades recentes...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Guests Section -->
+        <section id="guests-section" class="section" style="display: none;">
+            <div class="content-card">
+                <div class="content-card-header">
+                    <h2 class="content-card-title">
+                        👥 Lista de Convidados
+                    </h2>
+                    <div class="content-card-actions">
+                        <button class="btn btn-secondary" onclick="refreshGuestList()">
+                            🔄 Atualizar
+                        </button>
+                        <button class="btn btn-primary" onclick="exportGuestList()">
+                            📥 Exportar Lista
+                        </button>
+                    </div>
+                </div>
+                <div class="content-card-body">
+                    <div id="guestsTable" class="loading">
+                        <div class="spinner"></div>
+                        Carregando lista de convidados...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Messages Section -->
+        <section id="messages-section" class="section" style="display: none;">
+            <div class="content-card">
+                <div class="content-card-header">
+                    <h2 class="content-card-title">
+                        💌 Mensagens dos Convidados
+                    </h2>
+                    <div class="content-card-actions">
+                        <button class="btn btn-secondary" onclick="refreshMessages()">
+                            🔄 Atualizar
+                        </button>
+                        <button class="btn btn-primary" onclick="exportMessages()">
+                            📥 Exportar Mensagens
+                        </button>
+                    </div>
+                </div>
+                <div class="content-card-body">
+                    <div id="messagesList" class="loading">
+                        <div class="spinner"></div>
+                        Carregando mensagens...
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Export Section -->
+        <section id="export-section" class="section" style="display: none;">
+            <div class="content-card">
+                <div class="content-card-header">
+                    <h2 class="content-card-title">
+                        📥 Exportar Dados
+                    </h2>
+                </div>
+                <div class="content-card-body">
+                    <div class="form-group">
+                        <label class="form-label">Formato de Exportação</label>
+                        <select id="exportFormat" class="form-control">
+                            <option value="csv">CSV (Excel)</option>
+                            <option value="json">JSON</option>
+                            <option value="txt">Texto simples</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Dados para Exportar</label>
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="exportGuests" checked>
+                                Lista de convidados
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="exportMessages" checked>
+                                Mensagens
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                <input type="checkbox" id="exportStats" checked>
+                                Estatísticas
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary" onclick="exportData()" style="width: 100%;">
+                        📥 Exportar Dados Selecionados
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="./assets/js/admin.js"></script>
+</body>
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Painel de Administração</h1>
-        <div id="passwordSection" class="password-container">
-            <label for="passwordInput">Senha de Acesso:</label>
-            <input type="password" id="passwordInput">
-            <button id="passwordButton">Entrar</button>
-        </div>
+    
         <div id="adminPanel" style="display: none;">
             <div class="stats">
                 <div class="stat-card">

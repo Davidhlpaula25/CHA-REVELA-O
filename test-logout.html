@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Logout - Chá Revelação</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+        }
+        .test-section {
+            background: #f9f9f9;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #E91E63;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+        button {
+            background: #E91E63;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #C2185B;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste de Logout - Sistema Chá Revelação</h1>
+    
+    <div class="test-section">
+        <h2>Estado Atual do Sistema</h2>
+        <div id="currentStatus"></div>
+        <button onclick="checkAuthStatus()">Verificar Estado de Autenticação</button>
+        <button onclick="clearStorage()">Limpar LocalStorage</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Testes de Navegação</h2>
+        <div id="navigationResults"></div>
+        <button onclick="testAdminAccess()">Testar Acesso ao Admin</button>
+        <button onclick="testLoginPage()">Testar Página de Login</button>
+        <button onclick="testMainPage()">Testar Página Principal</button>
+    </div>
+
+    <div class="test-section">
+        <h2>Simular Cenários de Logout</h2>
+        <div id="logoutResults"></div>
+        <button onclick="simulateAdminLogout()">Simular Logout do Admin</button>
+        <button onclick="simulateNavigationLogout()">Simular Logout por Navegação</button>
+        <button onclick="setLoggedIn()">Simular Login Válido</button>
+    </div>
+
+    <script>
+        function updateStatus(elementId, message, type = 'info') {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="status ${type}">${message}</div>` + element.innerHTML;
+        }
+
+        function checkAuthStatus() {
+            const isLoggedIn = localStorage.getItem('adminLoggedIn');
+            const hasLogoutFlag = localStorage.getItem('adminLogout');
+            
+            let status = `
+                <strong>Estado da Autenticação:</strong><br>
+                • adminLoggedIn: ${isLoggedIn || 'null'}<br>
+                • adminLogout: ${hasLogoutFlag || 'null'}<br>
+                • Timestamp: ${new Date().toLocaleString()}
+            `;
+            
+            updateStatus('currentStatus', status, 'info');
+        }
+
+        function clearStorage() {
+            localStorage.clear();
+            updateStatus('currentStatus', 'LocalStorage limpo completamente!', 'success');
+            checkAuthStatus();
+        }
+
+        function testAdminAccess() {
+            const currentLoggedIn = localStorage.getItem('adminLoggedIn');
+            const currentLogout = localStorage.getItem('adminLogout');
+            
+            if (currentLoggedIn === 'true' && currentLogout !== 'true') {
+                updateStatus('navigationResults', '✅ Acesso ao admin permitido - usuário autenticado', 'success');
+            } else {
+                updateStatus('navigationResults', '❌ Acesso ao admin negado - redirecionamento para login necessário', 'error');
+            }
+        }
+
+        function testLoginPage() {
+            updateStatus('navigationResults', '🔐 Página de login sempre acessível', 'info');
+        }
+
+        function testMainPage() {
+            updateStatus('navigationResults', '🏠 Página principal sempre acessível', 'info');
+        }
+
+        function simulateAdminLogout() {
+            localStorage.setItem('adminLogout', 'true');
+            localStorage.removeItem('adminLoggedIn');
+            updateStatus('logoutResults', '🚪 Logout do admin simulado - flags definidas', 'success');
+        }
+
+        function simulateNavigationLogout() {
+            // Simula o que acontece quando clica em "Voltar ao formulário"
+            localStorage.setItem('adminLogout', 'true');
+            updateStatus('logoutResults', '🔄 Logout por navegação simulado - será necessário fazer login novamente', 'success');
+        }
+
+        function setLoggedIn() {
+            localStorage.setItem('adminLoggedIn', 'true');
+            localStorage.removeItem('adminLogout');
+            updateStatus('logoutResults', '✅ Login válido simulado', 'success');
+        }
+
+        // Verificar estado inicial
+        window.onload = function() {
+            checkAuthStatus();
+        };
+    </script>
+</body>
+</html>
