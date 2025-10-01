@@ -7,7 +7,7 @@
     "start": "python -m http.server 8000",
     "serve": "npx serve .",
     "dev": "npx live-server .",
-    "build": "echo 'No build process needed for static site'",
+    "build": "echo 'Static site - no build needed'",
     "deploy": "echo 'Deploy to your preferred hosting service'"
   },
   "keywords": [
